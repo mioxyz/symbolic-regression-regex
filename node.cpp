@@ -22,11 +22,9 @@ Node::~Node() {
    }
 }
 
-auto Node::randomNonRootType() -> int {
+auto Node::randomNonRootType() -> Node::Type {
    puts "+++randomNonRootType";
-   auto dump = 1 + (rand() % 2);
-   put " ~> " << dump;
-   return dump;
+   return allNonRootTypes[rand() % ALL_NON_ROOT_TYPES_SIZE];
 }
 
 auto Node::addTerminal(Node::Type type) -> Node* {

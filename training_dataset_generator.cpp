@@ -59,22 +59,29 @@ Node* selectRandomNode(vector<Node*> nodes) {
 }
 
 
-#define ALL_SYMBOLS_SIZE 5
-const std::array<char, ALL_SYMBOLS_SIZE> allSymbols = {'.', '*', 'a', 'b', 'c'};
+#define ALL_SYMBOLS_SIZE 3
+const std::array<char, ALL_SYMBOLS_SIZE> allSymbols = {'a', 'b', 'c'};
 char randomLeafSymbol() {
    return allSymbols[rand() % ALL_SYMBOLS_SIZE];
 }
+
 
 void addRandomTerminalToNode(Node* node) {
    puts "+++addRandomTerminalToNode";
    put " for node(" << node->id << ")";
       auto dump = Node::randomNonRootType();
       switch(dump) {
+         case Node::Type::Asterisk:
+            node->addTerminal(Node::Type::Asterisk);
+            break;
+         case Node::Type::Dot:
+            node->addTerminal(Node::Type::Dot);
+            break;
          case Node::Type::Const: {
             puts "case Const: adding random leaf to any node.";
-            auto dump2 = randomLeafSymbol();
-            puts "dump2: " << dump2;
-            node->addTerminal(dump2);
+            auto dump = randomLeafSymbol();
+            puts "dump: " << dump;
+            node->addTerminal(dump);
          } break;
          case Node::Type::Bracket:
             puts "case square brackets";
@@ -83,13 +90,9 @@ void addRandomTerminalToNode(Node* node) {
             );
             break;
          case Node::Type::Root:
-            throw std::logic_error("not implemented. And you probably don't want to.");
+            throw std::logic_error("not implemented. And you probably don't want to. xyz");
          default:
             puts "dump: " << dump;
-            puts "dump: " << dump;
-            puts "dump: " << dump;
-            puts "dump: " << dump;
-
             throw std::invalid_argument("impossible");
       }
 }
@@ -122,9 +125,9 @@ auto generatePatterns(int symbolCount) -> string {
 
    // root.consolidateBrackets();
    puts root.stringify();
-   root.consolidateBrackets();
-   root.consolidateBrackets();
-   root.consolidateBrackets();
+   // root.consolidateBrackets();
+   // root.consolidateBrackets();
+   // root.consolidateBrackets();
    puts root.stringify();
    return root.stringify();
 }
@@ -137,7 +140,7 @@ auto sampleGenerator(Node& root) -> string {
    std::stringstream ss;
    for(const auto& terminal : root.terminals) {
       if(Node::Type::Asterisk == terminal->type) {
-         
+
       }
    }
 
@@ -165,14 +168,14 @@ auto main() -> int {
    for(auto& pattern : patterns) {
       puts pattern;
    }
-   puts "---main";
+   puts "---main" << std::endl;
 }
 
 /*
    Nested bracktes don't make sense.
    »^[[a]]*$«
    is interpreted as
-   »[\[a]\]*« 
+   »[\[a]\]*«
    where »\[« and »\]« are just normal symbols.
 
    This simpler form of regex isn't really nested at all,
@@ -182,7 +185,7 @@ auto main() -> int {
    2. »...a*...« repeat const symbol as often as we want.
    3. »...[abc]*...« repeat any symbol in list as often as we want.
    we only have 1 real operator »*«.
-   
+
    consts really are just »[a]« with »a« const. are eq. »...a...« <=> »...[a]...« obviously.
    so we are only really dealing with:
    »[a][bc][d]*[ef]*.« -> »{ Brackets("a"), brackets({b, c}), brackets({d}), *, brackets({e,f}) }«
@@ -190,7 +193,7 @@ auto main() -> int {
    »a[bc][d]*[ef]*«
    »ab[d]*[ef]*«
    »ab[d][d][d][ef]*« notice that we need to process * before we process brackets!
-   
+
    »abd*[ef]*«
    »abdddd[ef]*«
    »abddddf*«
@@ -209,6 +212,6 @@ auto main() -> int {
    what about: »a.*b«, then * has prio:
    »a...b«
    »aXYZb«
-   
+
    so ranking is: »*«, ».«, »[ ]«, »a«
 */

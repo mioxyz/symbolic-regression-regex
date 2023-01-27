@@ -1,3 +1,5 @@
+mkdir -p bin; clang++ -std=c++20 training_dataset_generator.cpp node.cpp -g -o bin/training_dataset_generator && bin/training_dataset_generator
+
 We want a simple, yet data-set-confined regex pattern that matches a group of strings.
 We might be able to make the following conclusions of the string-set we want to classify:
 

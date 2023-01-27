@@ -5,6 +5,7 @@
 #include <vector>
 #include <list>
 #include <map>
+#include <array>
 
 #define put std::cout << " " <<
 #define puts std::cout << std::endl <<
@@ -14,6 +15,10 @@ template<typename stuff> using list = std::list<stuff>;
 
 using string = std::string;
 using view = std::string_view;
+
+#define ALL_NON_ROOT_TYPES_SIZE 4
+// const std::array<Node::Type, ALL_NON_ROOT_TYPES_SIZE> allNonRootTypes = { Node::Type::Asterisk,
+//                                                Node::Type::Bracket, Node::Type::Const, Node::Type::Dot };
 
 
 class Node {
@@ -25,6 +30,13 @@ class Node {
       Dot = 2,
       Bracket = 3,
       Const = 255,
+   };
+
+   static constexpr std::array<Node::Type, ALL_NON_ROOT_TYPES_SIZE> allNonRootTypes = { 
+      Node::Type::Asterisk
+    , Node::Type::Bracket
+    , Node::Type::Const
+    , Node::Type::Dot 
    };
 
    Type type;
@@ -40,7 +52,7 @@ class Node {
 
    ~Node();
 
-   static auto randomNonRootType() -> int;
+   static auto randomNonRootType() -> Node::Type;
 
    auto addTerminal(Type) -> Node*;
 
